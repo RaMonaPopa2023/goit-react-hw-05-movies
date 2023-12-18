@@ -1,0 +1,26 @@
+.sidebar ul {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  list-style-type: none;
+  margin: 20px;
+}
+
+.navLink {
+  color: #0e0e0e;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 1.25px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.navLink a:hover,
+.navLink a:focus {
+  text-decoration: underline;
+}
+
+.navLinkActive {
+  color: #ff6b0a !important;
+}
