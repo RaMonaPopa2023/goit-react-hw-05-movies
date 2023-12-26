@@ -29,7 +29,7 @@ function MoviePage() {
   };
 
   return (
-    <div>
+    <div className={styles.body}>
       <input
         type="text"
         placeholder="Search for a movie..."

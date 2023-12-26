@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../pages/common/components/Sidebar/Sidebar.jsx';
 
@@ -7,7 +7,9 @@ const SharedLayout = () => {
     <main className="App">
       <Sidebar />
       <section className="container">
-        <Outlet />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Outlet />
+        </Suspense>
       </section>
     </main>
   );

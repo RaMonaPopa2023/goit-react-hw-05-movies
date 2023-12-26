@@ -1,5 +1,5 @@
-div {
-  margin: 0;
+body {
+  margin: 0px;
   padding: 10px;
 }
 
@@ -17,14 +17,4 @@ ul {
 
 li {
   margin-bottom: 10px;
-}
-
-a {
-  text-decoration: none;
-  color: #007bff;
-  font-weight: bold;
-}
-
-a:hover {
-  text-decoration: underline;
 }

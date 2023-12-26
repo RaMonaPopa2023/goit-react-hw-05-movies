@@ -1,21 +1,45 @@
-import React, { lazy } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SharedLayout from './components/SharedLayout';
-import HomePage from './pages/Home/HomePage';
-import MoviesPage from './pages/Movies/MoviesPage';
-import MovieDetails from './pages/Movies/MovieDetails';
+import Cast from './pages/Movies/Cast';
+import Reviews from './pages/Movies/Reviews';
+
+const HomePage = lazy(() => import('./pages/Home/HomePage'));
+const MoviesPage = lazy(() => import('./pages/Movies/MoviesPage'));
+const MoviesDetails = lazy(() => import('./pages/Movies/MoviesDetails'));
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<SharedLayout />}>
-          <Route index element={<HomePage />}></Route>
-          <Route path="movies" element={<MoviesPage />} />
-          <Route path="movies/:id" element={<MovieDetails />}>
-            <Route index element={<MovieDetails />} />
-            <Route path="cast" element={<MovieDetails />} />
-            <Route path="reviews" element={<MovieDetails />} />
+          <Route
+            index
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <HomePage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="movies"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <MoviesPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="movies/:id/*"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <MoviesDetails />
+              </Suspense>
+            }
+          >
+            <Route index element={<MoviesDetails />} />
+            <Route path="cast" element={<Cast />} />
+            <Route path="reviews" element={<Reviews />} />
           </Route>
           <Route path="*" element={<HomePage />} />
         </Route>
@@ -23,5 +47,4 @@ const App = () => {
     </BrowserRouter>
   );
 };
-
 export default App;

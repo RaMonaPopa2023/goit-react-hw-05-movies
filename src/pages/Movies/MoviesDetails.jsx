@@ -1,27 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useEffect, useState, startTransition } from 'react';
+import { useParams, Link, Routes, Route } from 'react-router-dom';
 import MovieDetailsService from '../../service/MovieDetailsService';
 import styles from './MoviesDetails.module.css';
 import CastService from '../../service/CastService';
 import ReviewsService from '../../service/ReviewsService';
+import Cast from './Cast';
+import Reviews from './Reviews';
 
 function MoviesDetails() {
   const { id } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
-  const [showCast, setShowCast] = useState(false); // Update to boolean for toggling
-  const [cast, setCast] = useState([]); // Update to always be an array
+  const [showCast, setShowCast] = useState(false);
+  const [cast, setCast] = useState([]);
   const [showReviews, setShowReviews] = useState(false);
-  const [reviews, setReviews] = useState([]); // Update to always be an array
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
-        const response = await MovieDetailsService.retrieveMovieDetails(id);
-        setMovieDetails(response);
+        const responseDetails = await MovieDetailsService.retrieveMovieDetails(
+          id
+        );
+        setMovieDetails(responseDetails);
+
         const responseCast = await CastService.retrieveCast(id);
         setCast(responseCast.cast || []);
+
         const responseReviews = await ReviewsService.retrieveReviews(id);
-        console.log(responseReviews);
         setReviews(responseReviews.results || []);
       } catch (error) {
         console.error('Error fetching movie details:', error);
@@ -65,9 +70,11 @@ function MoviesDetails() {
                 <br />
               </h2>
               <p>
-                {' '}
-                {movieDetails.genres.map(genre => genre.name).join(', ')}
-              </p>{' '}
+                Genres: <br />
+                {movieDetails.genres
+                  ? movieDetails.genres.map(genre => genre.name).join(', ')
+                  : 'No genres available'}
+              </p>
             </div>
           </div>
           <div className={styles.info}>
@@ -82,34 +89,18 @@ function MoviesDetails() {
                 Reviews
               </Link>
             </p>
-            {showCast && cast.length > 0 && (
-              <div className={styles.cast}>
-                <ul>
-                  {cast.map(actor => (
-                    <li className={styles.list} key={actor.id}>
-                      <img
-                        src={`https://image.tmdb.org/t/p/w500/${actor.profile_path}`}
-                        alt={actor.name}
-                      />
-                      <p>{actor.name} </p>
-                      <p>Character: {actor.character}</p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {showReviews && reviews.length > 0 && (
-              <div className={styles.review}>
-                <ul>
-                  {reviews.map(review => (
-                    <li className={styles.list} key={review.id}>
-                      <p>{review.author} </p>
-                      <p>{review.content}</p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            <Routes>
+              <Route
+                path="cast"
+                element={<Cast showCast={showCast} cast={cast} />}
+              />
+              <Route
+                path="reviews"
+                element={
+                  <Reviews showReviews={showReviews} reviews={reviews} />
+                }
+              />
+            </Routes>
           </div>
         </>
       )}
