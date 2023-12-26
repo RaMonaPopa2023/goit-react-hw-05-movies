@@ -1,4 +1,4 @@
-import React, { useEffect, useState, startTransition } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link, Routes, Route } from 'react-router-dom';
 import MovieDetailsService from '../../service/MovieDetailsService';
 import styles from './MoviesDetails.module.css';
